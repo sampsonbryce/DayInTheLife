@@ -5,6 +5,7 @@ import VueMarkdown from 'vue-markdown'
 import Bulma from 'bulma' // import bulma css framework
 import Icon from 'vue-awesome/components/Icon.vue' // import font awesome vue icon
 import 'vue-awesome/icons' // import all font awesome icons
+import router from './router';
 
 Vue.use(Bulma);
 Vue.use(VueResource);
@@ -15,5 +16,6 @@ Vue.component('vue-markdown', VueMarkdown); // markdown parser
 
 new Vue({
   el: '#app',
+  router,
   render: h => h(App)
 })
