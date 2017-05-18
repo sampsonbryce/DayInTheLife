@@ -1,0 +1,19 @@
+{
+  "name": "dayinlife",
+  "version": "1.0.0",
+  "description": "Personal Blog",
+  "main": "server.js",
+  "author": "Bryce Sampson",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "mongodb": "^2.2.26"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "scripts": {
+    "dev": "nodemon server.js"
+  }
+}
