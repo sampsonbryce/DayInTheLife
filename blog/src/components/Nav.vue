@@ -1,9 +1,9 @@
 <template>
 <nav class="nav">
   <div class="nav-left">
-    <a class="nav-item">
+    <router-link class="nav-item" to='/'>
         <h2 class="title is-3">Day In The Life</h2>
-    </a>
+    </router-link>
   </div>
 
   <!-- This "nav-toggle" hamburger menu is only visible on mobile -->
@@ -17,9 +17,9 @@
   <!-- This "nav-menu" is hidden on mobile -->
   <!-- Add the modifier "is-active" to display it on mobile -->
   <div class="nav-right nav-menu">
-    <a class="nav-item" href='/'>
+    <router-link class="nav-item" to='/'>
       Home
-    </a>
+    </router-link>
     <a class="nav-item">
       Blog
     </a>

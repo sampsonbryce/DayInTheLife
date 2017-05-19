@@ -1,11 +1,10 @@
-var ObjectID = require('mongodb').ObjectID;
+var Post = require('../models/post');
 
 module.exports = function(app, db){
 
     // get
-
     app.get('/post/list', (req, res) => {
-        db.collection('posts').find({}).toArray((err, items) => {
+        Post.find((err, items) => {
             if(err){
                 res.send({'error': "An error has occured"});
             }else{
