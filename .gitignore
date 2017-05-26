@@ -1,4 +1,4 @@
-*/config
+*/config/db.js
 .DS_Store
 node_modules/
 dist/

@@ -1,5 +1,23 @@
 module.exports = function (app, passport) {
-    app.post('/signup', passport.authenticate('local-signup', { failureFlash: true }));
+    app.post('/signup', function(req, res, next){
+        passport.authenticate('local-signup', function(err, user, info){
+            console.log('info', info, user)
+            if (err) { return next(err); }
+            if (user) { 
+                console.log('returning user exists json');
+                res.status(401);
+                res.setHeader('Content-Type', 'application/json');
+                return res.send(JSON.stringify({ message: info.registerMessage }, null, 3));
+            }
+            req.logIn(user, function (err) {
+                if (err) { console.log('error'); return next(err); }
+                console.log('returing failed to register json');
+                res.status(401);
+                res.setHeader('Content-Type', 'application/json');
+                return res.send(JSON.stringify({ message: "Failed to Register and login" }, null, 3));
+            });
+        })(req, res, next);
+    })
     app.post('/login', function (req, res, next) {
         passport.authenticate('local-login', function (err, user, info) {
             console.log('info', info)
