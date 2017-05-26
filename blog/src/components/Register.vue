@@ -20,7 +20,7 @@
                     <div class="field">
                         <label class="label">Confirm Password</label>
                         <p class="control">
-                            <input class="input" v-bind:class="fieldError('confirm_password')" type="password" id="confirm_password" />
+                            <input class="input confirm-password" v-bind:class="fieldError('confirm_password')" type="password" />
                         </p>
                         <p v-if="'confirm_password' in this.errors" class="help is-danger">{{ errors['confirm_password'] }}</p>
                     </div>
@@ -47,7 +47,7 @@ export default {
             this.errors = {};
             let form = document.getElementById("register-form");
             var pass = document.querySelector('form input[name="password"]');
-            var c_pass = document.querySelector('form #confirm_password');
+            var c_pass = document.querySelector('form .confirm-password');
             console.log('pass', pass.value, c_pass.value);
             if (pass.value != c_pass.value){
                 this.$set(this.errors, 'confirm_password', "Passwords do not match!");
@@ -56,7 +56,13 @@ export default {
             console.log('form', form)
             let data = getFormData(form);
             console.log('data', data);
-            this.$http.post(API.url + '/signup', data).then(response => {
+            this.$http.post(API.url + '/signup', data, {
+                emulateJSON: true
+                //headers: {
+                    //'Content-Type': 'multipart/form-data'
+                    //'Content-Type': 'application/json'
+                //}
+            }).then(response => {
                 //success
                 console.log('success');
             }, response => {

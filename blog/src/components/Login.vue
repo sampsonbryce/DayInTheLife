@@ -25,6 +25,7 @@
 <script>
 import API from '../api'
 import getFormData from 'get-form-data'
+//import router from '../router'
 
 export default {
     name: "login",
@@ -34,9 +35,12 @@ export default {
             console.log('form', form)
             let data = getFormData(form);
             console.log('data', data);
-            this.$http.post(API.url + '/login', data).then(response => {
+            this.$http.post(API.url + '/login', data, {
+                emulateJSON: true
+            }).then(response => {
                 //success
                 console.log('success');
+                this.$route.router.go('/');
             }, response => {
                 //error
                 console.log('error');
