@@ -26,7 +26,6 @@
     <a class="nav-item">
       Me
     </a>
-    <router-link to="/login" class="nav-item">Login</router-link>
 
     <div class="nav-item">
       <div class="field is-grouped">

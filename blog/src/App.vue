@@ -2,15 +2,14 @@
   <div id="app">
     <nav-menu></nav-menu>
     <router-view></router-view>
-    <div class="footer">
-      Footer
-    </div>
+    <page-footer></page-footer>
   </div>
 </template>
 
 <script>
 import Posts from './components/Posts.vue';
 import NavMenu from './components/Nav.vue';
+import PageFooter from './components/Footer.vue';
 import VueMarkdown from 'vue-markdown';
 
 export default {
@@ -22,8 +21,9 @@ export default {
   },
   components: {
     Posts,
-    NavMenu
-  }
+    NavMenu,
+    PageFooter
+  },
 }
 </script>
 
@@ -32,12 +32,17 @@ export default {
 
 /* Google fonts */
 
+html, body{
+  height:100%;
+}
+
 #app {
   font-family: 'Abel', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  height:100%;
 }
 
 .title {

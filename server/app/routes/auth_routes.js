@@ -1,3 +1,6 @@
+var jwt = require('jsonwebtoken');
+var jwtOptions = require('../../config/jwt');
+
 module.exports = function(app, passport) {
 
     // signup
@@ -8,18 +11,13 @@ module.exports = function(app, passport) {
             if (err) { console.log('err', err); return next(err); }
             if (!user) {
                 console.log('returning user exists json');
-                res.status(401);
-                res.setHeader('Content-Type', 'application/json');
-                return res.send(JSON.stringify({ message: info.registerMessage }, null, 3));
-            }
-            req.logIn(user, function(err) {
-                if (err) { console.log('error', err); return next(err); }
-
+                res.status(401).json({ message: info.registerMessage });
+            } else {
                 console.log('returing failed to register json');
-                res.status(200);
-                res.setHeader('Content-Type', 'application/json');
-                return res.send(JSON.stringify({ message: "User Registered" }, null, 3));
-            });
+                var payload = { id: user._id };
+                var token = jwt.sign(payload, jwtOptions.secretOrKey);
+                res.json({ message: "Registered", token: token });
+            }
         })(req, res, next);
     });
 
@@ -30,27 +28,23 @@ module.exports = function(app, passport) {
             if (err) { return next(err); }
             if (!user) {
                 console.log('returing user not found json');
-                res.status(401);
-                res.setHeader('Content-Type', 'application/json');
-                return res.send(JSON.stringify({ message: info.loginMessage }, null, 3));
+                res.status(401).json({ message: info.loginMessage });
+            } else {
+                console.log('user exists, returing jwt', user);
+                var payload = { id: user._id };
+                var token = jwt.sign(payload, jwtOptions.secretOrKey);
+                res.json({ message: "Logged in", token: token });
             }
-            req.logIn(user, function(err) {
-                if (err) { return next(err); }
-                console.log('returing failed to login json');
-                res.status(200);
-                res.setHeader('Content-Type', 'application/json');
-                return res.send(JSON.stringify({ message: "Logged in" }, null, 3));
-            });
         })(req, res, next);
     });
 
-    function isLoggedIn(req, res, next) {
-        console.log('is logged in?');
-        // if user is authenticated in the session, carry on 
-        if (req.isAuthenticated())
-            return next();
+    // function isLoggedIn(req, res, next) {
+    //     console.log('is logged in?');
+    //     // if user is authenticated in the session, carry on 
+    //     if (req.isAuthenticated())
+    //         return next();
 
-        // if they aren't redirect them to the home page
-        res.redirect('/');
-    }
+    //     // if they aren't redirect them to the home page
+    //     res.redirect('/');
+    //}
 }

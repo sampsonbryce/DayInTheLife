@@ -4,9 +4,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const db = require('./config/db');
 const passport = require('passport');
-const expressSession = require('express-session');
 const morgan = require('morgan');
 const flash = require('connect-flash');
+const jwt = require('jsonwebtoken');
 
 // framework
 const app = express();
@@ -28,7 +28,7 @@ var allowCrossDomain = function(req, res, next) {
     next();
 }
 
-var log = function(req,res,next){
+var log = function(req, res, next) {
     console.log('LOG');
     next();
 }
@@ -38,9 +38,7 @@ app.use(morgan('dev'));
 app.use(allowCrossDomain);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(expressSession({secret: 'godilovebaconsodamnmuch', saveUninitialized: true, resave: false}));
 app.use(passport.initialize());
-app.use(passport.session());
 app.use(flash());
 
 
@@ -50,4 +48,4 @@ require('./app/routes')(app, passport);
 // listen
 app.listen(port, () => {
     console.log('We are live on ' + port);
-});               
+});

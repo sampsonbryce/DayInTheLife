@@ -1,9 +1,28 @@
 // load all the things we need
 var LocalStrategy = require('passport-local').Strategy;
 var User = require('../app/models/user');
+const passportJWT = require("passport-jwt");
+var jwtOptions = require('./jwt');
+
+var JwtStrategy = passportJWT.Strategy;
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
+
+    console.log('jwtoptions', jwtOptions)
+    var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
+        console.log('payload received', jwt_payload);
+        // usually this would be a database call:
+        User.findById(jwt_payload.id, function(err, user) {
+            if (user) {
+                next(null, user);
+            } else {
+                next(null, false);
+            }
+        });
+    });
+
+    passport.use(strategy);
     // =========================================================================
     // passport session setup ==================================================
     // =========================================================================
@@ -11,17 +30,17 @@ module.exports = function(passport) {
     // passport needs ability to serialize and unserialize users out of session
 
     // used to serialize the user for the session
-    passport.serializeUser(function(user, done) {
-        console.log("SERIALIZING", user);
-        done(null, user.id);
-    });
+    // passport.serializeUser(function(user, done) {
+    //     console.log("SERIALIZING", user);
+    //     done(null, user.id);
+    // });
 
     // used to deserialize the user
-    passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
-            done(err, user);
-        });
-    });
+    // passport.deserializeUser(function(id, done) {
+    //     User.findById(id, function(err, user) {
+    //         done(err, user);
+    //     });
+    // });
 
 
     // =========================================================================

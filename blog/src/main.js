@@ -6,6 +6,7 @@ import Bulma from 'bulma' // import bulma css framework
 import Icon from 'vue-awesome/components/Icon.vue' // import font awesome vue icon
 import 'vue-awesome/icons' // import all font awesome icons
 import router from './router';
+import Auth from './services/auth'
 
 Vue.use(Bulma);
 Vue.use(VueResource);
@@ -14,8 +15,11 @@ Vue.use(VueResource);
 Vue.component('icon', Icon); // font awesome icons
 Vue.component('vue-markdown', VueMarkdown); // markdown parser
 
+
+Auth.checkAuth();
+
 new Vue({
-  el: '#app',
-  router,
-  render: h => h(App)
+    el: '#app',
+    router,
+    render: h => h(App)
 })
