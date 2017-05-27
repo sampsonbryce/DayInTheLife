@@ -9,7 +9,6 @@ var JwtStrategy = passportJWT.Strategy;
 // expose this function to our app using module.exports
 module.exports = function(passport) {
 
-    console.log('jwtoptions', jwtOptions)
     var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
         console.log('payload received', jwt_payload);
         // usually this would be a database call:

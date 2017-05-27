@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <nav-menu></nav-menu>
-    <router-view></router-view>
+    <div id="wrap">
+      <div id="main">
+        <nav-menu></nav-menu>
+        <router-view></router-view>
+      </div>
+    </div>
     <page-footer></page-footer>
   </div>
 </template>
@@ -28,12 +32,27 @@ export default {
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Abel|Cinzel|Montserrat+Subrayada');
-
 /* Google fonts */
 
-html, body{
-  height:100%;
+@import url('https://fonts.googleapis.com/css?family=Abel|Cinzel|Montserrat+Subrayada');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+#main {
+  overflow: auto;
+  padding-bottom: 150px;
+}
+
+#wrap {
+  min-height: 100%;
 }
 
 #app {
@@ -42,7 +61,7 @@ html, body{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height:100%;
+  height: 100%;
 }
 
 .title {

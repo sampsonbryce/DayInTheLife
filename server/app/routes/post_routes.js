@@ -1,13 +1,13 @@
 var Post = require('../models/post');
 
-module.exports = function(app, db){
+module.exports = function(app, db) {
 
     // get
     app.get('/post/list', (req, res) => {
         Post.find((err, items) => {
-            if(err){
-                res.send({'error': "An error has occured"});
-            }else{
+            if (err) {
+                res.send({ 'error': "An error has occured" });
+            } else {
                 res.send(items);
             }
         });
@@ -15,27 +15,29 @@ module.exports = function(app, db){
 
     app.get('/post/:id', (req, res) => {
         const id = req.params.id;
-        const details = { '_id': new ObjectID(id)};
-        db.collection('posts').find(details, (err, item) => {
-            if(err){
-                res.send({'error': "An error has occured"});
-            }else{
+        const details = { '_id': new ObjectID(id) };
+        Post.find(details, (err, item) => {
+            if (err) {
+                res.send({ 'error': "An error has occured" });
+            } else {
                 res.send(item);
             }
         });
     })
 
-    
+
 
 
     // post
-    app.post('/post', (req, res) => {
-        const post = { content: req.body.content, title: req.body.title };
-        db.collection('posts').insert(details, (err, item) => {
-            if(err){
-                res.send({'error': "An error has occured"});
-            }else{
-                res.send(result.ops[0]);
+    app.post('/post/create', (req, res) => {
+        var post = new Post();
+        post.content = "";
+        post.title = req.body.title;
+        post.save(function(err) {
+            if (err) {
+                res.status('500').json({ 'error': "An error has occured" });
+            } else {
+                res.status('200').json(post);
             }
         });
     })
@@ -44,13 +46,13 @@ module.exports = function(app, db){
     app.put('/post/:id', (req, res) => {
 
         const id = req.params.id;
-        const details = { '_id': new ObjectID(id)};
+        const details = { '_id': new ObjectID(id) };
         const post = { content: req.body.content, title: req.body.title };
 
-        db.collection('posts').update(details, post, (err, item) => {
-            if(err){
-                res.send({'error': "An error has occured"});
-            }else{
+        Post.update(details, post, (err, item) => {
+            if (err) {
+                res.send({ 'error': "An error has occured" });
+            } else {
                 res.send(post);
             }
         });
@@ -60,12 +62,12 @@ module.exports = function(app, db){
     app.delete('/post/:id', (req, res) => {
 
         const id = req.params.id;
-        const details = { '_id': new ObjectID(id)};
+        const details = { '_id': new ObjectID(id) };
 
-        db.collection('posts').remove(details, (err, item) => {
-            if(err){
-                res.send({'error': "An error has occured"});
-            }else{
+        Post.remove(details, (err, item) => {
+            if (err) {
+                res.send({ 'error': "An error has occured" });
+            } else {
                 res.send('Post ' + id + ' deleted!');
             }
         });

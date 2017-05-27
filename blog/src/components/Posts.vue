@@ -8,7 +8,7 @@
         </section>
         <section class='section'>
             <div class="container">
-                <div class="columns">
+                <div class="columns is-multiline">
                     <div v-for='card in post_cards' class='box column is-8 is-offset-2'>
                         <h2 class="title">{{ card.title }}</h2>
                         <p>
