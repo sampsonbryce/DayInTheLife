@@ -34,8 +34,6 @@ var router = new Router({
 
 
 router.beforeEach((to, from, next) => {
-    console.log('transition', to, from);
-    // if (!Auth.authenticated) {
     if (to.meta.requiresAuth && !Auth.authenticated) {
         // if route requires auth and user isn't authenticated
         next('/login')

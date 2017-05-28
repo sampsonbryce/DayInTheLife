@@ -1,5 +1,5 @@
 <template>
-    <div style="height:100%">
+    <div>
         <section class="hero is-info column is-12 ">
             <div class="container">
                 <div class='columns'>
@@ -14,15 +14,22 @@
                 </div>
             </div>
         </section>
-        <section class='section' style="height:100%">
-            <div class="container" style="height:100%">
-                <div class="columns" style="height:100%">
-                    <div class="column is-6">
-                        <textarea v-model="input" id="mdtext" class="textarea"></textarea>
-                    </div>
-                    <div class="column is-6">
-                        <vue-markdown v-bind:source="input"></vue-markdown>
-                    </div>
+        <section class='section'>
+            <div class="columns">
+                <div class="column is-2">
+                    <posts-title-list @selected="changeSelection" ref="postlist"></posts-title-list>
+                </div>
+                <div class="column is-5">
+                    <input v-model="title" id="ptitle" class="input" placeholder="title"></input>
+                    <textarea v-model="content" id="pcontent" class="textarea" placeholder="content"></textarea>
+                </div>
+                <div class="column is-5">
+                    <vue-markdown v-bind:source="content"></vue-markdown>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-12 has-text-centered">
+                    <button class="button is-primary" v-on:click="updatePost">Update</button>
                 </div>
             </div>
         </section>
@@ -39,25 +46,53 @@
 </template>
 
 <script>
-import API from '../api';
+import PostsService from '../services/posts';
+import PostsTitleList from './PostsTitleList.vue'
 
 export default {
     data() {
         return {
             new_title: "",
             modal_active: false,
-            input: "test"
+            content: "",
+            title: "",
+            id: null
         }
     },
     methods: {
-        createPost() {
-            this.$http.post(API.url + '/post/create', { title: this.new_title }, { emulateJSON: true }).then(response => {
-                console.log('created post', response);
+        getPost(id) {
+            PostsService.getPost(this, id).then(response => {
+                console.log('got post', response.body);
+                this.title = response.body.title || "";
+                this.content = response.body.content || "";
+                this.id = response.body._id;
+            }, response => {
+                console.error('error', response);
+            });
+        },
+        updatePost(){
+            console.log('content', this.content);
+            PostsService.updatePost(this, this.id, this.title, this.content).then(response => {
+                console.log('udpated');
+                this.$refs.postlist.getPosts();
+            }, response => {
+                console.error('error', response);
+            });
+        },
+        createPost(){
+            PostsService.createPost(this, this.new_title, "").then(response => {
+                console.log('created');
                 this.modal_active = false;
             }, response => {
-                console.log('error', response)
+                console.error('error', response);
             });
+        },
+        changeSelection(id){
+            this.getPost(id);
         }
+    },
+    components: {
+        PostsTitleList
     }
 }
 
@@ -68,7 +103,7 @@ export default {
     margin-top: 15px;
 }
 
-#mdtext{
-    height:100%;
+#pcontent {
+    height: 300px;
 }
 </style>

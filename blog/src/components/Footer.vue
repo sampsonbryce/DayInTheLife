@@ -32,10 +32,10 @@ export default {
 
 <style>
     .footer{
-        position:relative;
-        bottom:0;
+        /*position:absolute;
+        bottom:0;*/
         width:100%;
-        margin-top:-150px !important;
+        /*margin-top:-150px !important;*/
         height:150px;
         padding: 1rem 1.5rem 1rem 1.5rem !important;
         clear:both;

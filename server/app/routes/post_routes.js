@@ -15,8 +15,8 @@ module.exports = function(app, db) {
 
     app.get('/post/:id', (req, res) => {
         const id = req.params.id;
-        const details = { '_id': new ObjectID(id) };
-        Post.find(details, (err, item) => {
+        const details = { '_id': id };
+        Post.findOne(details, (err, item) => {
             if (err) {
                 res.send({ 'error': "An error has occured" });
             } else {
@@ -25,11 +25,8 @@ module.exports = function(app, db) {
         });
     })
 
-
-
-
     // post
-    app.post('/post/create', (req, res) => {
+    app.post('/post', (req, res) => {
         var post = new Post();
         post.content = "";
         post.title = req.body.title;
@@ -44,9 +41,8 @@ module.exports = function(app, db) {
 
     // put
     app.put('/post/:id', (req, res) => {
-
         const id = req.params.id;
-        const details = { '_id': new ObjectID(id) };
+        const details = { '_id': id };
         const post = { content: req.body.content, title: req.body.title };
 
         Post.update(details, post, (err, item) => {

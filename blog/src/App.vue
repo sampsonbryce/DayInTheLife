@@ -1,10 +1,8 @@
 <template>
   <div id="app">
-    <div id="wrap">
-      <div id="main">
-        <nav-menu></nav-menu>
-        <router-view></router-view>
-      </div>
+    <div id="main">
+      <nav-menu></nav-menu>
+      <router-view></router-view>
     </div>
     <page-footer></page-footer>
   </div>
@@ -18,11 +16,6 @@ import VueMarkdown from 'vue-markdown';
 
 export default {
   name: 'app',
-  data() {
-    return {
-      msg: 'Welcome to Your Vue.js App'
-    }
-  },
   components: {
     Posts,
     NavMenu,
@@ -47,12 +40,7 @@ body {
 }
 
 #main {
-  overflow: auto;
-  padding-bottom: 150px;
-}
-
-#wrap {
-  min-height: 100%;
+  flex: 1;
 }
 
 #app {
@@ -62,6 +50,8 @@ body {
   text-align: center;
   color: #2c3e50;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
