@@ -14,22 +14,23 @@
                         <p>
                             <vue-markdown>{{ card.content }}</vue-markdown>
                         </p>
-                         <!--<button v-if="Auth.authenticated">
-                            <router-link to="/posteditor">
-                                <icon class="edit"></icon>
-                            </router-link>
-                        </button>-->
-                   </div>
+                        <!--<button v-if="Auth.authenticated">
+                                <router-link to="/posteditor">
+                                    <icon class="edit"></icon>
+                                </router-link>
+                            </button>-->
+                    </div>
                 </div>
             </div>
-        </section>
         </section>
     </div>
 </template>
 
 <script>
-import PostsService from '../services/posts';
-import Auth from '../services/auth';
+import Auth from '../services/auth'
+// var Auth = require('../services/auth.js');
+// console.log('Auth', Auth);
+import PostsService from '../services/posts'
 
 export default {
     name: 'posts',
@@ -42,7 +43,6 @@ export default {
         getCards() {
             PostsService.getPosts(this).then(response => {
                 // success
-                console.log('got cards', response.body);
                 this.post_cards = response.body;
             }, response => {
                 // error

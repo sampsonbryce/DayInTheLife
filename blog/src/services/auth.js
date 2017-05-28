@@ -13,14 +13,12 @@ export default {
                 console.log('logged in', data);
                 localStorage.setItem('token', data.body.token);
 
-                this.authenticated = true
-                    //context.$root.user = data
+                this.authenticated = true;
 
                 // Redirect to a specified route
                 if (redirect) {
                     router.push({ path: redirect });
                 }
-
             }, response => {
                 console.log('errors', response);
                 context.errors = response;
@@ -28,7 +26,7 @@ export default {
     },
 
     // To log out
-    logout: function() {
+    logout() {
         localStorage.removeItem('token');
         this.authenticated = false;
         router.push({ path: '/login' });
