@@ -27,10 +27,8 @@
 </template>
 
 <script>
-import Auth from '../services/auth'
-// var Auth = require('../services/auth.js');
-// console.log('Auth', Auth);
-import PostsService from '../services/posts'
+import Auth from '../services/auth.js';
+import PostsService from '../services/posts';
 
 export default {
     name: 'posts',

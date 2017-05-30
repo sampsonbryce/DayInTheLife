@@ -39,5 +39,5 @@ export default {
         } else {
             this.authenticated = false
         }
-    },
+    }
 }

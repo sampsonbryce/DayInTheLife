@@ -2,6 +2,7 @@
   <div id="app">
     <div id="main">
       <nav-menu></nav-menu>
+      <!--<posts></posts>-->
       <router-view></router-view>
     </div>
     <page-footer></page-footer>
@@ -21,6 +22,9 @@ export default {
     NavMenu,
     PageFooter
   },
+  beforeMount (){
+    console.log('before mount', this);
+  }
 }
 </script>
 

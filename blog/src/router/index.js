@@ -1,13 +1,12 @@
 import Vue from 'vue';
-import Router from 'vue-router';
+import VueRouter from 'vue-router';
 import Posts from '../components/Posts.vue';
 import Login from '../components/Login.vue';
 import Register from '../components/Register.vue';
 import PostEditor from '../components/PostEditor.vue';
 import Auth from '../services/auth.js';
 
-Vue.use(Router);
-var router = new Router({
+var router = new VueRouter({
     routes: [{
             path: '/',
             name: 'Posts',
