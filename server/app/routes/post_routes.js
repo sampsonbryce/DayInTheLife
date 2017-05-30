@@ -58,13 +58,13 @@ module.exports = function(app, db) {
     app.delete('/post/:id', (req, res) => {
 
         const id = req.params.id;
-        const details = { '_id': new ObjectID(id) };
+        const details = { '_id': id };
 
         Post.remove(details, (err, item) => {
             if (err) {
-                res.send({ 'error': "An error has occured" });
+                res.status('500').send({ 'error': "An error has occured" });
             } else {
-                res.send('Post ' + id + ' deleted!');
+                res.json({ "message": 'Post ' + id + ' deleted!' });
             }
         });
     })

@@ -2,7 +2,7 @@ import API from '../api';
 
 export default {
     createPost(context, title, content) {
-        return this.$http.post(API.url + '/post', { title: title }, { emulateJSON: true });
+        return context.$http.post(API.url + '/post', { title: title }, { emulateJSON: true });
     },
     updatePost(context, id, title, content) {
         let data = {
@@ -16,5 +16,8 @@ export default {
     },
     getPosts(context) {
         return context.$http.get(API.url + '/post/list');
+    },
+    deletePost(context, id) {
+        return context.$http.delete(API.url + '/post/' + id);
     }
 }

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <toast></toast>
     <div id="main">
       <nav-menu></nav-menu>
       <!--<posts></posts>-->
@@ -13,6 +14,7 @@
 import Posts from './components/Posts.vue';
 import NavMenu from './components/Nav.vue';
 import PageFooter from './components/Footer.vue';
+import Toast from './components/Toast.vue';
 import VueMarkdown from 'vue-markdown';
 
 export default {
@@ -20,7 +22,8 @@ export default {
   components: {
     Posts,
     NavMenu,
-    PageFooter
+    PageFooter,
+    Toast
   },
   beforeMount (){
     console.log('before mount', this);

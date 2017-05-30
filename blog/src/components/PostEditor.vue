@@ -48,6 +48,7 @@
 <script>
 import PostsService from '../services/posts';
 import PostsTitleList from './PostsTitleList.vue'
+import EventBus from '../services/eventBus'
 
 export default {
     data() {
@@ -75,6 +76,7 @@ export default {
             PostsService.updatePost(this, this.id, this.title, this.content).then(response => {
                 console.log('udpated');
                 this.$refs.postlist.getPosts();
+                EventBus.$emit('toast', "Updated!", "Good job!", "success");
             }, response => {
                 console.error('error', response);
             });
@@ -83,6 +85,7 @@ export default {
             PostsService.createPost(this, this.new_title, "").then(response => {
                 console.log('created');
                 this.modal_active = false;
+                this.$refs.postlist.getPosts();
             }, response => {
                 console.error('error', response);
             });
