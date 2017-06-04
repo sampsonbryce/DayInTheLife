@@ -47,8 +47,8 @@
 
 <script>
 import PostsService from '../services/posts';
-import PostsTitleList from './PostsTitleList.vue'
-import EventBus from '../services/eventBus'
+import PostsTitleList from './PostsTitleList.vue';
+import EventBus from '../services/eventBus';
 
 export default {
     data() {
@@ -63,18 +63,16 @@ export default {
     methods: {
         getPost(id) {
             PostsService.getPost(this, id).then(response => {
-                console.log('got post', response.body);
                 this.title = response.body.title || "";
                 this.content = response.body.content || "";
                 this.id = response.body._id;
+                this.$router.push({"hash": this.id});
             }, response => {
                 console.error('error', response);
             });
         },
         updatePost(){
-            console.log('content', this.content);
             PostsService.updatePost(this, this.id, this.title, this.content).then(response => {
-                console.log('udpated');
                 this.$refs.postlist.getPosts();
                 EventBus.$emit('toast', "Updated!", "Good job!", "success");
             }, response => {
@@ -83,9 +81,11 @@ export default {
         },
         createPost(){
             PostsService.createPost(this, this.new_title, "").then(response => {
-                console.log('created');
+                console.log('created', response);
                 this.modal_active = false;
                 this.$refs.postlist.getPosts();
+                this.$router.push({"hash": response.body._id});
+                this.getPost(response.body._id);
             }, response => {
                 console.error('error', response);
             });
@@ -96,13 +96,19 @@ export default {
     },
     components: {
         PostsTitleList
+    },
+    created(){
+        var post_id = this.$route.hash;
+        if(post_id){
+            this.getPost(post_id.slice(1));
+        }
     }
 }
 
 </script>
 
 <style>
-.modal-content>* {
+.modal-content > * {
     margin-top: 15px;
 }
 

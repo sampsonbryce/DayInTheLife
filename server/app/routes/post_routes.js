@@ -1,4 +1,9 @@
 var Post = require('../models/post');
+const passport = require('passport');
+
+function authenticate() {
+    return passport.authenticate('jwt', { session: false })
+}
 
 module.exports = function(app, db) {
 
@@ -40,7 +45,7 @@ module.exports = function(app, db) {
     })
 
     // put
-    app.put('/post/:id', (req, res) => {
+    app.put('/post/:id', authenticate(), (req, res) => {
         const id = req.params.id;
         const details = { '_id': id };
         const post = { content: req.body.content, title: req.body.title };

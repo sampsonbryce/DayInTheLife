@@ -41,7 +41,7 @@ export default {
             });
         },
         deletePost(){
-            PostsService.deletePost(this, this.delete_id).then(response => {
+            PostsService.deletePost(this, this.to_delete.id).then(response => {
                 console.log('deleted');
                 this.to_delete = {};
                 this.getPosts();

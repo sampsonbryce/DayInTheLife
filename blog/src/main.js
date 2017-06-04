@@ -17,6 +17,16 @@ Vue.use(VueRouter);
 Vue.component('icon', Icon); // font awesome icons
 Vue.component('vue-markdown', VueMarkdown); // markdown parser
 
+Vue.http.interceptors.push((request, next) => {
+    request.headers.set('Authorization', Auth.getAuthHeader());
+    next();
+    //   next((response) => {
+    //     if(response.status == 401 ) {
+    //       auth.logout();
+    //       router.go('/login?unauthorized=1');
+    //     }
+    //   });
+});
 
 Auth.checkAuth();
 

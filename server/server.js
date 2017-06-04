@@ -22,8 +22,8 @@ require('./config/passport')(passport);
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*'); // TODO: In production change to my sites
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
 
     next();
 }
@@ -37,6 +37,7 @@ var log = function(req, res, next) {
 app.use(morgan('dev'));
 app.use(allowCrossDomain);
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(flash());

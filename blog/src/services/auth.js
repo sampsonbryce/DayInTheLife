@@ -5,6 +5,7 @@ export default {
 
     // authentication status
     authenticated: false,
+    //Vue.http.headers.common['Authorization'] = auth.getAuthHeader();
 
     // Send a request to the login URL and save the returned JWT
     login(context, creds, redirect) {
@@ -30,6 +31,10 @@ export default {
         localStorage.removeItem('token');
         this.authenticated = false;
         router.push({ path: '/login' });
+    },
+
+    getAuthHeader() {
+        return 'JWT ' + localStorage.getItem('token')
     },
 
     checkAuth() {

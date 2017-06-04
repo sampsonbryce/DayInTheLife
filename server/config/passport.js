@@ -11,7 +11,7 @@ module.exports = function(passport) {
 
     var strategy = new JwtStrategy(jwtOptions, function(jwt_payload, next) {
         console.log('payload received', jwt_payload);
-        // usually this would be a database call:
+
         User.findById(jwt_payload.id, function(err, user) {
             if (user) {
                 next(null, user);
@@ -22,25 +22,6 @@ module.exports = function(passport) {
     });
 
     passport.use(strategy);
-    // =========================================================================
-    // passport session setup ==================================================
-    // =========================================================================
-    // required for persistent login sessions
-    // passport needs ability to serialize and unserialize users out of session
-
-    // used to serialize the user for the session
-    // passport.serializeUser(function(user, done) {
-    //     console.log("SERIALIZING", user);
-    //     done(null, user.id);
-    // });
-
-    // used to deserialize the user
-    // passport.deserializeUser(function(id, done) {
-    //     User.findById(id, function(err, user) {
-    //         done(err, user);
-    //     });
-    // });
-
 
     // =========================================================================
     // LOCAL SIGNUP ============================================================
@@ -131,7 +112,5 @@ module.exports = function(passport) {
                 // all is well, return successful user
                 return done(null, user);
             });
-
         }));
-
 };
