@@ -31,7 +31,7 @@ module.exports = function(app, db) {
     })
 
     // post
-    app.post('/post', (req, res) => {
+    app.post('/post', authenticate(), (req, res) => {
         var post = new Post();
         post.content = "";
         post.title = req.body.title;
@@ -60,7 +60,7 @@ module.exports = function(app, db) {
     })
 
     // delete
-    app.delete('/post/:id', (req, res) => {
+    app.delete('/post/:id', authenticate(), (req, res) => {
 
         const id = req.params.id;
         const details = { '_id': id };
@@ -73,5 +73,4 @@ module.exports = function(app, db) {
             }
         });
     })
-
 }
