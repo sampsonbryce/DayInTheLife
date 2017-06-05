@@ -15,10 +15,16 @@
                                 {{ card.title }}
                             </router-link>
                         </h2>
-                        <p class="has-text-left">
+                        <p class="has-text-left post-content">
                             <vue-markdown>{{ card.content }}</vue-markdown>
                         </p>
-                        <router-link :to="{ path: '/post/' + card._id }">Read More...</router-link>
+                        <div class="meta-link-container">
+                            <div class="dates">
+                                <span>Created: {{ getDate(card.created) }}</span>
+                                <span v-if="card.updated != card.created">Updated: {{ getDate(card.updated) }}</span>
+                            </div>
+                            <router-link :to="{ path: '/post/' + card._id }">Read More...</router-link>
+                        </div>
                         <div class="has-text-right">
                             <router-link :to="{ path: '/posteditor', hash: card._id }" v-if="authenticated" class="button is-primary edit-link">
                                 <span class="icon">
@@ -55,6 +61,10 @@ export default {
                 // error
                 console.error('Failed to get cards');
             });
+        },
+        getDate(date){
+            var new_date = new Date(date);
+            return (new_date.getMonth()+1) + '/' + new_date.getDate() + '/' + new_date.getFullYear();
         }
     },
     beforeMount() {
@@ -62,3 +72,18 @@ export default {
     }
 }
 </script>
+
+<style>
+.post-content{
+    max-height:150px;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+.dates{
+    color:#cacaca;
+}
+.meta-link-container{
+    display: flex;
+    justify-content: space-between;
+}
+</style>

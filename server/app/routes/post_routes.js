@@ -48,7 +48,7 @@ module.exports = function(app, db) {
     app.put('/post/:id', authenticate(), (req, res) => {
         const id = req.params.id;
         const details = { '_id': id };
-        const post = { content: req.body.content, title: req.body.title };
+        const post = { content: req.body.content, title: req.body.title, updated: new Date().getTime() };
 
         Post.update(details, post, (err, item) => {
             if (err) {
