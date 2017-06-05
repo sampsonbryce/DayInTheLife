@@ -1,11 +1,9 @@
-import router from '../router';
 import API from '../api'
 
 export default {
 
     // authentication status
     authenticated: false,
-    //Vue.http.headers.common['Authorization'] = auth.getAuthHeader();
 
     // Send a request to the login URL and save the returned JWT
     login(context, creds, redirect) {
@@ -18,7 +16,7 @@ export default {
 
                 // Redirect to a specified route
                 if (redirect) {
-                    router.push({ path: redirect });
+                    context.$router.push({ path: redirect });
                 }
             }, response => {
                 console.log('errors', response);
@@ -27,10 +25,11 @@ export default {
     },
 
     // To log out
-    logout() {
+    logout(context) {
+        console.log('logging out');
         localStorage.removeItem('token');
         this.authenticated = false;
-        router.push({ path: '/login' });
+        context.$router.push({ path: '/login' });
     },
 
     getAuthHeader() {

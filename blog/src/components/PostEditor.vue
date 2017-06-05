@@ -23,7 +23,7 @@
                     <input v-model="title" id="ptitle" class="input" placeholder="title"></input>
                     <textarea v-model="content" id="pcontent" class="textarea" placeholder="content"></textarea>
                 </div>
-                <div class="column is-5">
+                <div class="column is-5 has-text-left">
                     <vue-markdown v-bind:source="content"></vue-markdown>
                 </div>
             </div>

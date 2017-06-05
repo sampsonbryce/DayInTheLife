@@ -30,7 +30,7 @@
     <div class="nav-item">
       <div class="field is-grouped">
         <p class="control">
-          <a class="button is-primary">
+          <a class="button is-primary" href="https://github.com/sampsonbryce" target="_blank">
             <span class="icon">
                <icon name="github"></icon>
             </span>

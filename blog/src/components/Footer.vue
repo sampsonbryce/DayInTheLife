@@ -24,7 +24,7 @@ export default {
 
     methods:{
         logout(){
-            Auth.logout();
+            Auth.logout(this);
         }
     }
 }

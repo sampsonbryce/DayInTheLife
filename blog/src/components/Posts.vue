@@ -10,15 +10,23 @@
             <div class="container">
                 <div class="columns is-multiline">
                     <div v-for='card in post_cards' class='box column is-8 is-offset-2'>
-                        <h2 class="title">{{ card.title }}</h2>
-                        <p>
+                        <h2 class="title">
+                            <router-link :to="{ path: '/post/' + card._id }">
+                                {{ card.title }}
+                            </router-link>
+                        </h2>
+                        <p class="has-text-left">
                             <vue-markdown>{{ card.content }}</vue-markdown>
                         </p>
-                        <!--<button v-if="Auth.authenticated">
-                                <router-link to="/posteditor">
-                                    <icon class="edit"></icon>
-                                </router-link>
-                            </button>-->
+                        <router-link :to="{ path: '/post/' + card._id }">Read More...</router-link>
+                        <div class="has-text-right">
+                            <router-link :to="{ path: '/posteditor', hash: card._id }" v-if="authenticated" class="button is-primary edit-link">
+                                <span class="icon">
+                                    <icon name="pencil-square-o"></icon>
+                                </span>
+                            </router-link>
+                        </div>
+    
                     </div>
                 </div>
             </div>
@@ -34,7 +42,8 @@ export default {
     name: 'posts',
     data() {
         return {
-            post_cards: []
+            post_cards: [],
+            authenticated: Auth.authenticated
         }
     },
     methods: {
@@ -44,6 +53,7 @@ export default {
                 this.post_cards = response.body;
             }, response => {
                 // error
+                console.error('Failed to get cards');
             });
         }
     },

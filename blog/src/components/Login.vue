@@ -25,7 +25,6 @@
 <script>
 import API from '../api'
 import getFormData from 'get-form-data'
-import router from '../router'
 import Auth from '../services/auth'
 
 export default {
