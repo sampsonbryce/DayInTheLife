@@ -4,7 +4,7 @@ var ExtractJwt = passportJWT.ExtractJwt;
 
 var jwtOptions = {}
 jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeader();
-jwtOptions.secretOrKey = 'tasmanianDevil';
+jwtOptions.secretOrKey = process.env.JWT_SECRET;
 
 
 module.exports = jwtOptions;

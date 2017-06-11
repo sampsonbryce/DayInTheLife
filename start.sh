@@ -1,4 +1,5 @@
 #!/bin/bash
+source .config.cfg
 
 cd blog 
 yarn run dev &
