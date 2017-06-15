@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import API from '../api'
+import API from 'api'
 import getFormData from 'get-form-data'
 import Auth from '../services/auth'
 

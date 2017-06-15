@@ -44,6 +44,7 @@ module.exports = {
     resolve: {
         alias: {
             // 'vue$': 'vue/dist/vue.esm.js'
+            api: path.join(__dirname, 'src', 'api_config', process.env.NODE_ENV)
         },
     },
     devServer: {
@@ -56,7 +57,7 @@ module.exports = {
     devtool: '#eval-source-map'
 }
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'prod') {
     module.exports.devtool = '#source-map'
         // http://vue-loader.vuejs.org/en/workflow/production.html
     module.exports.plugins = (module.exports.plugins || []).concat([

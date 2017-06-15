@@ -1,0 +1,25 @@
+version: '3'
+services:
+  nginx:
+    restart: always
+    build: ./blog
+    ports: 
+      - "80:80"
+    networks:
+      - default
+    links: 
+      - node:node
+    depends_on: 
+      - node
+    container_name: nginx
+  node:
+    restart: always
+    build: ./server
+    networks:
+      - default
+    ports: 
+      - "8000:8000"
+    container_name: node
+networks:
+  default:
+    driver: bridge
