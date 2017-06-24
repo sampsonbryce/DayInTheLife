@@ -20,15 +20,20 @@
                     <posts-title-list @selected="changeSelection" ref="postlist"></posts-title-list>
                 </div>
                 <div class="column is-5 markdown-editor">
-                    <input v-model="title" id="ptitle" class="input" placeholder="title"></input>
-                    <textarea v-model="content" id="pcontent" class="textarea" placeholder="content"></textarea>
+                    <input v-model="edit_post.title" id="ptitle" class="input" placeholder="title"></input>
+                    <input v-model="edit_post.subtitle" id="psubtitle" class="input" placeholder="subtitle"></input>
+                    <textarea v-model="edit_post.content" id="pcontent" class="textarea" placeholder="content"></textarea>
                 </div>
                 <div class="column is-5 has-text-left rendered-markdown">
-                    <vue-markdown v-bind:source="content"></vue-markdown>
+                    <vue-markdown v-bind:source="edit_post.content"></vue-markdown>
                 </div>
             </div>
             <div class="columns button-container">
                 <div class="column is-12 has-text-centered">
+                    <div class="private-container">
+                        <input type="checkbox" v-model="edit_post.private" id="pprivate" class="checkbox" /> 
+                        <span>Private?</span>
+                    </div>
                     <button class="button is-primary" v-on:click="updatePost">Update</button>
                 </div>
             </div>
@@ -55,24 +60,27 @@ export default {
         return {
             new_title: "",
             modal_active: false,
-            content: "",
-            title: "",
-            id: null
+            edit_post: {}
         }
     },
     methods: {
-        getPost(id) {
-            PostsService.getPost(this, id).then(response => {
-                this.title = response.body.title || "";
-                this.content = response.body.content || "";
-                this.id = response.body._id;
+        getPost(id, is_private) {
+            let api_call;
+            if(is_private){
+                api_call = PostsService.getPrivatePost(this, id);
+            }
+            else{
+                api_call = PostsService.getPost(this, id);
+            }
+            api_call.then(response => {
+                this.edit_post = response.body;
                 this.$router.push({"hash": this.id});
             }, response => {
                 console.error('error', response);
             });
         },
         updatePost(){
-            PostsService.updatePost(this, this.id, this.title, this.content).then(response => {
+            PostsService.updatePost(this, this.edit_post).then(response => {
                 this.$refs.postlist.getPosts();
                 EventBus.$emit('toast', "Updated!", "Good job!", "success");
             }, response => {
@@ -81,7 +89,6 @@ export default {
         },
         createPost(){
             PostsService.createPost(this, this.new_title, "").then(response => {
-                console.log('created', response);
                 this.modal_active = false;
                 this.$refs.postlist.getPosts();
                 this.$router.push({"hash": response.body._id});
@@ -90,8 +97,8 @@ export default {
                 console.error('error', response);
             });
         },
-        changeSelection(id){
-            this.getPost(id);
+        changeSelection(data){
+            this.getPost(data.id, data.is_private);
         }
     },
     components: {
@@ -104,7 +111,6 @@ export default {
         }
     }
 }
-
 </script>
 
 <style lang="sass">

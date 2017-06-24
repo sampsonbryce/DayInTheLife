@@ -2,7 +2,7 @@
     <div>
         <section class="hero is-info column is-12 has-text-left">
             <div class="container">
-                <h1 class="title">Posts</h1>
+                <h1 class="title">{{ this.type == 'private' ?  'Private' : '' }} Posts</h1>
                 <h2 class="subtitle">Recent</h2>
             </div>
         </section>
@@ -15,6 +15,9 @@
                                 {{ card.title }}
                             </router-link>
                         </h2>
+                        <h4 class="subtitle">
+                            {{ card.subtitle }}
+                        </h4>
                         <p class="has-text-left post-content">
                             <vue-markdown>{{ card.content }}</vue-markdown>
                         </p>
@@ -32,7 +35,6 @@
                                 </span>
                             </router-link>
                         </div>
-    
                     </div>
                 </div>
             </div>
@@ -45,6 +47,7 @@ import Auth from '../services/auth.js';
 import PostsService from '../services/posts';
 
 export default {
+    props: ['type'],
     name: 'posts',
     data() {
         return {
@@ -54,7 +57,15 @@ export default {
     },
     methods: {
         getCards() {
-            PostsService.getPosts(this).then(response => {
+            console.log('getting cards', this.type)
+            let api_call;
+            if (this.type == 'private'){
+                console.log('getting private posts,', this.type)
+                api_call = PostsService.getPrivatePosts(this);
+            }else{
+                api_call = PostsService.getPosts(this);
+            }
+            api_call.then(response => {
                 // success
                 this.post_cards = response.body;
             }, response => {
@@ -69,6 +80,11 @@ export default {
     },
     beforeMount() {
         this.getCards();
+    },
+    watch: {
+        type(){
+            this.getCards();
+        }
     }
 }
 </script>

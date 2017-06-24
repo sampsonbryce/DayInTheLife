@@ -14,9 +14,17 @@ var router = new VueRouter({
             component: Posts,
         },
         {
+            path: '/posts/:type',
+            name: 'PrivatePosts',
+            component: Posts,
+            meta: { requiresAuth: true },
+            props: true
+        },
+        {
             path: '/post/:id',
             name: 'FullPost',
-            component: FullPost
+            component: FullPost,
+            props: true
         },
         {
             path: '/login',

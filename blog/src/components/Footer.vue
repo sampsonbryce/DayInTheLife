@@ -1,12 +1,18 @@
 <template>
 <div class="footer">
     <div class="columns">
-        <div class='column is-4 is-offset-8'>
-            <div>
-                <router-link to="/posteditor">Editor</router-link>
+        <div class='column is-4 is-offset-4'>
+            <div v-if="authenticated">
+                <div>
+                    <router-link to="/posteditor">Editor</router-link>
+                </div>
+                <div>
+                    <router-link to="/posts/private">Private</router-link>
+                </div>
             </div>
-
-            <div>
+        </div>
+        <div class='column is-4'>
+                   <div>
                 <router-link to="/login">Login</router-link>
             </div>
 
@@ -17,14 +23,20 @@
     </div>
 </div>
 </template>
+
 <script>
 import Auth from '../services/auth'
 
 export default {
-
+    data(){
+        return{
+            authenticated: Auth.authenticated
+        }
+    },
     methods:{
         logout(){
             Auth.logout(this);
+            this.authenticated = Auth.authenticated;
         }
     }
 }
@@ -32,10 +44,7 @@ export default {
 
 <style>
     .footer{
-        /*position:absolute;
-        bottom:0;*/
         width:100%;
-        /*margin-top:-150px !important;*/
         height:150px;
         padding: 1rem 1.5rem 1rem 1.5rem !important;
         clear:both;

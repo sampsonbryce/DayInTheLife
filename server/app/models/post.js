@@ -5,6 +5,7 @@ var postSchema = mongoose.Schema({
     title: String,
     subtitle: String,
     content: String,
+    private: Boolean,
     updated: { type: Date, default: function() { return new Date().getTime() } },
     created: { type: Date, default: function() { return new Date().getTime() } }
 

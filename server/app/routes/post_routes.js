@@ -9,7 +9,7 @@ module.exports = function(app, db) {
 
     // get
     app.get('/post/list', (req, res) => {
-        Post.find((err, items) => {
+        Post.find({ private: { $exists: false }}, (err, items) => {
             if (err) {
                 res.send({ 'error': "An error has occured" });
             } else {
@@ -20,7 +20,7 @@ module.exports = function(app, db) {
 
     app.get('/post/:id', (req, res) => {
         const id = req.params.id;
-        const details = { '_id': id };
+        const details = { '_id': id, private: { $exists: false}};
         Post.findOne(details, (err, item) => {
             if (err) {
                 res.send({ 'error': "An error has occured" });
@@ -35,6 +35,7 @@ module.exports = function(app, db) {
         var post = new Post();
         post.content = "";
         post.title = req.body.title;
+        post.private = false;
         post.save(function(err) {
             if (err) {
                 res.status('500').json({ 'error': "An error has occured" });
@@ -48,8 +49,12 @@ module.exports = function(app, db) {
     app.put('/post/:id', authenticate(), (req, res) => {
         const id = req.params.id;
         const details = { '_id': id };
-        const post = { content: req.body.content, title: req.body.title, updated: new Date().getTime() };
-
+        const post = { content: req.body.content, 
+            title: req.body.title, 
+            subtitle: req.body.subtitle, 
+            private: req.body.private,
+            updated: new Date().getTime() 
+        };
         Post.update(details, post, (err, item) => {
             if (err) {
                 res.send({ 'error': "An error has occured" });

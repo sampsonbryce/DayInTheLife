@@ -23,13 +23,14 @@ import PostsService from "../services/posts"
 
 export default {
     name: "FullPost",
+    props: ['id'],
     data() {
         return {
             post: {}
         }
     },
     created(){
-        PostsService.getPost(this, this.$route.params.id).then(response =>{
+        PostsService.getPost(this, this.id).then(response =>{
             this.post = response.body;
         }, response => {
             console.error("Failed to get post");
