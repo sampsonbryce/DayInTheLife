@@ -14,20 +14,20 @@
                 </div>
             </div>
         </section>
-        <section class='section'>
-            <div class="columns">
+        <section class='section content'>
+            <div class="columns content-container">
                 <div class="column is-2">
                     <posts-title-list @selected="changeSelection" ref="postlist"></posts-title-list>
                 </div>
-                <div class="column is-5">
+                <div class="column is-5 markdown-editor">
                     <input v-model="title" id="ptitle" class="input" placeholder="title"></input>
                     <textarea v-model="content" id="pcontent" class="textarea" placeholder="content"></textarea>
                 </div>
-                <div class="column is-5 has-text-left">
+                <div class="column is-5 has-text-left rendered-markdown">
                     <vue-markdown v-bind:source="content"></vue-markdown>
                 </div>
             </div>
-            <div class="columns">
+            <div class="columns button-container">
                 <div class="column is-12 has-text-centered">
                     <button class="button is-primary" v-on:click="updatePost">Update</button>
                 </div>
@@ -107,12 +107,52 @@ export default {
 
 </script>
 
-<style>
+<style lang="sass">
 .modal-content > * {
     margin-top: 15px;
 }
 
 #pcontent {
-    height: 300px;
+    flex:1;
+    resize: none;
+}
+.markdown-editor{
+    display:flex;
+    flex-direction: column;
+}
+body{
+}
+#app{
+    height: 100vh;
+}
+.nav{
+    height:50px;
+    overflow: hidden;
+}
+.hero{
+    height:50px;
+    overflow: hidden;
+}
+.content{
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+}
+
+.content > .content-container{
+    flex:1;
+    & .rendered-markdown{
+        overflow-y: auto;
+    }
+}
+.content > .button-container{
+}
+
+.footer{
+    height:100px;
+    overflow: hidden;
+}
+.content:not(:last-child){
+    margin:0;
 }
 </style>
