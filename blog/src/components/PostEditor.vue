@@ -22,7 +22,7 @@
                 <div class="column is-5 markdown-editor">
                     <input v-model="edit_post.title" id="ptitle" class="input" placeholder="title"></input>
                     <input v-model="edit_post.subtitle" id="psubtitle" class="input" placeholder="subtitle"></input>
-                    <textarea v-model="edit_post.content" id="pcontent" class="textarea" placeholder="content"></textarea>
+                    <textarea v-model="edit_post.content" id="pcontent" class="textarea" placeholder="content" @keyup="saveTimer"></textarea>
                 </div>
                 <div class="column is-5 has-text-left rendered-markdown">
                     <vue-markdown v-bind:source="edit_post.content"></vue-markdown>
@@ -31,8 +31,9 @@
             <div class="columns button-container">
                 <div class="column is-12 has-text-centered">
                     <div class="private-container">
-                        <input type="checkbox" v-model="edit_post.private" id="pprivate" class="checkbox" /> 
-                        <span>Private?</span>
+                        <select v-model="edit_post.type" id="pprivate" class='select'>
+                            <option v-for="option in post_types" >{{ option }}</option>
+                        </select>
                     </div>
                     <button class="button is-primary" v-on:click="updatePost">Update</button>
                 </div>
@@ -60,19 +61,15 @@ export default {
         return {
             new_title: "",
             modal_active: false,
-            edit_post: {}
+            post_types: ['public', 'private'],
+            edit_post: {},
+            timer: null
         }
     },
     methods: {
-        getPost(id, is_private) {
-            let api_call;
-            if(is_private){
-                api_call = PostsService.getPrivatePost(this, id);
-            }
-            else{
-                api_call = PostsService.getPost(this, id);
-            }
-            api_call.then(response => {
+        getPost(id, type) {
+            PostsService.getPost(this, id, type).then(response => {
+                console.log('got post', response.body);
                 this.edit_post = response.body;
                 this.$router.push({"hash": this.id});
             }, response => {
@@ -98,7 +95,16 @@ export default {
             });
         },
         changeSelection(data){
-            this.getPost(data.id, data.is_private);
+            console.log('change selection', data);
+            this.getPost(data.id, data.type);
+        },
+        saveTimer(){
+            if(this.timer != null){
+                clearTimeout(this.timer);
+            }
+            this.timer = setTimeout(() => {
+                this.updatePost()
+            }, 2000);
         }
     },
     components: {

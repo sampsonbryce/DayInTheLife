@@ -11,7 +11,7 @@
                 <div class="columns is-multiline">
                     <div v-for='card in post_cards' class='box column is-8 is-offset-2'>
                         <h2 class="title">
-                            <router-link :to="{ path: '/post/' + card._id }">
+                            <router-link :to="{ path: '/post/' + card.type + '/' + card._id }">
                                 {{ card.title }}
                             </router-link>
                         </h2>
@@ -26,7 +26,7 @@
                                 <span>Created: {{ getDate(card.created) }}</span>
                                 <span v-if="card.updated != card.created">Updated: {{ getDate(card.updated) }}</span>
                             </div>
-                            <router-link :to="{ path: '/post/' + card._id }">Read More...</router-link>
+                            <router-link :to="{ path: '/post/' + card.type + '/' + card._id }">Read More...</router-link>
                         </div>
                         <div class="has-text-right">
                             <router-link :to="{ path: '/posteditor', hash: card._id }" v-if="authenticated" class="button is-primary edit-link">
@@ -57,16 +57,13 @@ export default {
     },
     methods: {
         getCards() {
-            console.log('getting cards', this.type)
-            let api_call;
-            if (this.type == 'private'){
-                console.log('getting private posts,', this.type)
-                api_call = PostsService.getPrivatePosts(this);
-            }else{
-                api_call = PostsService.getPosts(this);
+            console.log('getting cards, type:', this.type)
+            if(this.type == 'private'){
+                Auth.checkAuthOrRedirect(this);
             }
-            api_call.then(response => {
+            PostsService.getPosts(this, this.type).then(response => {
                 // success
+                console.log('got posts', response.body)
                 this.post_cards = response.body;
             }, response => {
                 // error
@@ -83,6 +80,7 @@ export default {
     },
     watch: {
         type(){
+            console.log('type change')
             this.getCards();
         }
     }

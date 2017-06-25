@@ -9,7 +9,7 @@ module.exports = function(app, db) {
 
     // get
     app.get('/post/private/list', authenticate(), (req, res) => {
-            Post.find({private: true}, (err, items) => {
+            Post.find({type: 'private'}, (err, items) => {
             if (err) {
                 res.send({ 'error': "An error has occured" });
             } else {
@@ -20,7 +20,7 @@ module.exports = function(app, db) {
 
     app.get('/post/private/:id', authenticate(), (req, res) => {
         const id = req.params.id;
-        const details = { '_id': id };
+        const details = { '_id': id, type: 'private'};
         Post.findOne(details, (err, item) => {
             if (err) {
                 res.send({ 'error': "An error has occured" });

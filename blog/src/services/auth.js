@@ -35,7 +35,13 @@ export default {
     getAuthHeader() {
         return 'JWT ' + localStorage.getItem('token')
     },
-
+    checkAuthOrRedirect(context){
+        this.checkAuth();
+        if(this.authenticated = false){
+            context.$router.push({ path: '/login' });
+        }
+        return true;
+    },
     checkAuth() {
         var jwt = localStorage.getItem('token')
         if (jwt) {

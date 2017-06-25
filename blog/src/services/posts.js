@@ -7,17 +7,19 @@ export default {
     updatePost(context, post) {
         return context.$http.put(API.url + '/post/' + post._id, post, { emulateJSON: true });
     },
-    getPost(context, id) {
-        return context.$http.get(API.url + '/post/' + id);
+    getPost(context, id, type) {
+        if(type == 'private'){
+            return context.$http.get(API.url + '/post/private/' + id);
+        }else{
+            return context.$http.get(API.url + '/post/' + id);
+        }
     },
-    getPrivatePost(context, id) {
-        return context.$http.get(API.url + '/post/private/' + id);
-    },
-    getPosts(context) {
-        return context.$http.get(API.url + '/post/list');
-    },
-    getPrivatePosts(context){
-        return context.$http.get(API.url + '/post/private/list');
+    getPosts(context, type) {
+        if (type == 'private'){
+            return context.$http.get(API.url + '/post/private/list');
+        }else{
+            return context.$http.get(API.url + '/post/list');
+        }
     },
     deletePost(context, id) {
         return context.$http.delete(API.url + '/post/' + id);

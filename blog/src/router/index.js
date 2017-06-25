@@ -21,7 +21,7 @@ var router = new VueRouter({
             props: true
         },
         {
-            path: '/post/:id',
+            path: '/post/:type/:id',
             name: 'FullPost',
             component: FullPost,
             props: true

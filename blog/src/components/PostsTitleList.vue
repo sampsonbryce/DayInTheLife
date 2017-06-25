@@ -2,7 +2,7 @@
     <div>
         <ul>
            <li v-for="post in posts" class="title-item">
-               <a :data-id="post._id" @click="selected(post._id, post.private)">{{ post.title }}</a>
+               <a :data-id="post._id" @click="selected(post._id, post.type)">{{ post.title }}</a>
                <span @click="to_delete = {id: post._id, title: post.title}">
                    <icon name="trash"></icon>
                </span>
@@ -30,8 +30,8 @@ export default {
         }
     },
     methods:{
-        selected(id, is_private){
-            this.$emit('selected', {id: id, is_private: is_private});
+        selected(id, type){
+            this.$emit('selected', {id: id, type: type});
         },
         getPosts(){
             this.posts = []
@@ -41,7 +41,7 @@ export default {
                 console.error('error', response);
             });
 
-            PostsService.getPrivatePosts(this).then(response => {
+            PostsService.getPosts(this, 'private').then(response => {
               this.posts = this.posts.concat(response.body);
             }, response => {
                 console.error('error', response);
@@ -49,7 +49,6 @@ export default {
         },
         deletePost(){
             PostsService.deletePost(this, this.to_delete.id).then(response => {
-                console.log('deleted');
                 this.to_delete = {};
                 this.getPosts();
             }, response => {
