@@ -28,15 +28,14 @@
 import Auth from '../services/auth'
 
 export default {
-    data(){
-        return{
-            authenticated: Auth.authenticated
-        }
-    },
     methods:{
         logout(){
             Auth.logout(this);
-            this.authenticated = Auth.authenticated;
+        }
+    },
+    computed:{
+        authenticated(){
+            return Auth.isAuthenticated();
         }
     }
 }

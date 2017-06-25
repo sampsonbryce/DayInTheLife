@@ -52,7 +52,6 @@ export default {
     data() {
         return {
             post_cards: [],
-            authenticated: Auth.authenticated
         }
     },
     methods: {
@@ -73,6 +72,11 @@ export default {
         getDate(date){
             var new_date = new Date(date);
             return (new_date.getMonth()+1) + '/' + new_date.getDate() + '/' + new_date.getFullYear();
+        },
+    },
+    computed:{
+        authenticated (){
+            return Auth.isAuthenticated();
         }
     },
     beforeMount() {
@@ -82,7 +86,7 @@ export default {
         type(){
             console.log('type change')
             this.getCards();
-        }
+        },
     }
 }
 </script>
