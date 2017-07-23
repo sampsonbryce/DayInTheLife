@@ -29,6 +29,8 @@ jobs:
       - run: 
           name: Install Server Dependencies
           command: |
+            pwd
+            ls
             yarn install
 
       - save_cache:
