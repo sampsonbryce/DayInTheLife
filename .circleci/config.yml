@@ -26,14 +26,21 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: yarn install
+      - run: 
+          name: Install Server Dependecies
+          command: yarn install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
         
-      # run tests!
-      # - run: yarn test
-
+      - deploy:
+          name: Deploy to GCP
+          command: |
+          echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+          sudo /opt/google-cloud-sdk/bin/gcloud --quiet components update
+          sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+          sudo /opt/google-cloud-sdk/bin/gcloud config set project $GCLOUD_PROJECT
+          
 
