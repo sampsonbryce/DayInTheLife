@@ -32,7 +32,7 @@ module.exports = function(app, passport) {
             } else {
                 console.log('user exists, returing jwt', user);
                 var payload = { id: user._id };
-                var token = jwt.sign(payload, jwtOptions.secretOrKey);
+                var token = jwt.sign(payload, jwtOptions.secretOrKey, {expiresIn: '1hr'});
                 res.json({ message: "Logged in", token: token });
             }
         })(req, res, next);

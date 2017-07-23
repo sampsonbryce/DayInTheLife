@@ -2,7 +2,7 @@
     <div>
         <section class="hero is-info column is-12 has-text-left">
             <div class="container">
-                <h1 class="title">Posts</h1>
+                <h1 class="title">{{ this.type == 'private' ?  'Private' : '' }} Posts</h1>
                 <h2 class="subtitle">Recent</h2>
             </div>
         </section>
@@ -11,10 +11,13 @@
                 <div class="columns is-multiline">
                     <div v-for='card in post_cards' class='box column is-8 is-offset-2'>
                         <h2 class="title">
-                            <router-link :to="{ path: '/post/' + card._id }">
+                            <router-link :to="{ path: '/post/' + card.type + '/' + card._id }">
                                 {{ card.title }}
                             </router-link>
                         </h2>
+                        <h4 class="subtitle">
+                            {{ card.subtitle }}
+                        </h4>
                         <p class="has-text-left post-content">
                             <vue-markdown>{{ card.content }}</vue-markdown>
                         </p>
@@ -23,7 +26,7 @@
                                 <span>Created: {{ getDate(card.created) }}</span>
                                 <span v-if="card.updated != card.created">Updated: {{ getDate(card.updated) }}</span>
                             </div>
-                            <router-link :to="{ path: '/post/' + card._id }">Read More...</router-link>
+                            <router-link :to="{ path: '/post/' + card.type + '/' + card._id }">Read More...</router-link>
                         </div>
                         <div class="has-text-right">
                             <router-link :to="{ path: '/posteditor', hash: card._id }" v-if="authenticated" class="button is-primary edit-link">
@@ -32,7 +35,6 @@
                                 </span>
                             </router-link>
                         </div>
-    
                     </div>
                 </div>
             </div>
@@ -45,17 +47,22 @@ import Auth from '../services/auth.js';
 import PostsService from '../services/posts';
 
 export default {
+    props: ['type'],
     name: 'posts',
     data() {
         return {
             post_cards: [],
-            authenticated: Auth.authenticated
         }
     },
     methods: {
         getCards() {
-            PostsService.getPosts(this).then(response => {
+            console.log('getting cards, type:', this.type)
+            if(this.type == 'private'){
+                Auth.checkAuthOrRedirect(this);
+            }
+            PostsService.getPosts(this, this.type).then(response => {
                 // success
+                console.log('got posts', response.body)
                 this.post_cards = response.body;
             }, response => {
                 // error
@@ -65,10 +72,21 @@ export default {
         getDate(date){
             var new_date = new Date(date);
             return (new_date.getMonth()+1) + '/' + new_date.getDate() + '/' + new_date.getFullYear();
+        },
+    },
+    computed:{
+        authenticated (){
+            return Auth.isAuthenticated();
         }
     },
     beforeMount() {
         this.getCards();
+    },
+    watch: {
+        type(){
+            console.log('type change')
+            this.getCards();
+        },
     }
 }
 </script>

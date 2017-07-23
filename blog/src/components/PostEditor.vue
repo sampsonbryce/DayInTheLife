@@ -14,21 +14,27 @@
                 </div>
             </div>
         </section>
-        <section class='section'>
-            <div class="columns">
+        <section class='section content'>
+            <div class="columns content-container">
                 <div class="column is-2">
                     <posts-title-list @selected="changeSelection" ref="postlist"></posts-title-list>
                 </div>
-                <div class="column is-5">
-                    <input v-model="title" id="ptitle" class="input" placeholder="title"></input>
-                    <textarea v-model="content" id="pcontent" class="textarea" placeholder="content"></textarea>
+                <div class="column is-5 markdown-editor">
+                    <input v-model="edit_post.title" id="ptitle" class="input" placeholder="title"></input>
+                    <input v-model="edit_post.subtitle" id="psubtitle" class="input" placeholder="subtitle"></input>
+                    <textarea v-model="edit_post.content" id="pcontent" class="textarea" placeholder="content" @keyup="saveTimer"></textarea>
                 </div>
-                <div class="column is-5 has-text-left">
-                    <vue-markdown v-bind:source="content"></vue-markdown>
+                <div class="column is-5 has-text-left rendered-markdown">
+                    <vue-markdown v-bind:source="edit_post.content"></vue-markdown>
                 </div>
             </div>
-            <div class="columns">
+            <div class="columns button-container">
                 <div class="column is-12 has-text-centered">
+                    <div class="private-container">
+                        <select v-model="edit_post.type" id="pprivate" class='select'>
+                            <option v-for="option in post_types" >{{ option }}</option>
+                        </select>
+                    </div>
                     <button class="button is-primary" v-on:click="updatePost">Update</button>
                 </div>
             </div>
@@ -55,24 +61,23 @@ export default {
         return {
             new_title: "",
             modal_active: false,
-            content: "",
-            title: "",
-            id: null
+            post_types: ['public', 'private'],
+            edit_post: {},
+            timer: null
         }
     },
     methods: {
-        getPost(id) {
-            PostsService.getPost(this, id).then(response => {
-                this.title = response.body.title || "";
-                this.content = response.body.content || "";
-                this.id = response.body._id;
+        getPost(id, type) {
+            PostsService.getPost(this, id, type).then(response => {
+                console.log('got post', response.body);
+                this.edit_post = response.body;
                 this.$router.push({"hash": this.id});
             }, response => {
                 console.error('error', response);
             });
         },
         updatePost(){
-            PostsService.updatePost(this, this.id, this.title, this.content).then(response => {
+            PostsService.updatePost(this, this.edit_post).then(response => {
                 this.$refs.postlist.getPosts();
                 EventBus.$emit('toast', "Updated!", "Good job!", "success");
             }, response => {
@@ -81,7 +86,6 @@ export default {
         },
         createPost(){
             PostsService.createPost(this, this.new_title, "").then(response => {
-                console.log('created', response);
                 this.modal_active = false;
                 this.$refs.postlist.getPosts();
                 this.$router.push({"hash": response.body._id});
@@ -90,8 +94,17 @@ export default {
                 console.error('error', response);
             });
         },
-        changeSelection(id){
-            this.getPost(id);
+        changeSelection(data){
+            console.log('change selection', data);
+            this.getPost(data.id, data.type);
+        },
+        saveTimer(){
+            if(this.timer != null){
+                clearTimeout(this.timer);
+            }
+            this.timer = setTimeout(() => {
+                this.updatePost()
+            }, 2000);
         }
     },
     components: {
@@ -104,15 +117,54 @@ export default {
         }
     }
 }
-
 </script>
 
-<style>
+<style lang="sass">
 .modal-content > * {
     margin-top: 15px;
 }
 
 #pcontent {
-    height: 300px;
+    flex:1;
+    resize: none;
+}
+.markdown-editor{
+    display:flex;
+    flex-direction: column;
+}
+body{
+}
+#app{
+    height: 100vh;
+}
+.nav{
+    height:50px;
+    overflow: hidden;
+}
+.hero{
+    height:50px;
+    overflow: hidden;
+}
+.content{
+    height: calc(100vh - 200px);
+    display: flex;
+    flex-direction: column;
+}
+
+.content > .content-container{
+    flex:1;
+    & .rendered-markdown{
+        overflow-y: auto;
+    }
+}
+.content > .button-container{
+}
+
+.footer{
+    height:100px;
+    overflow: hidden;
+}
+.content:not(:last-child){
+    margin:0;
 }
 </style>

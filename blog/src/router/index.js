@@ -14,9 +14,17 @@ var router = new VueRouter({
             component: Posts,
         },
         {
-            path: '/post/:id',
+            path: '/posts/:type',
+            name: 'PrivatePosts',
+            component: Posts,
+            meta: { requiresAuth: true },
+            props: true
+        },
+        {
+            path: '/post/:type/:id',
             name: 'FullPost',
-            component: FullPost
+            component: FullPost,
+            props: true
         },
         {
             path: '/login',
@@ -39,7 +47,7 @@ var router = new VueRouter({
 
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.requiresAuth && !Auth.authenticated) {
+    if (to.meta.requiresAuth && !Auth.isAuthenticated()) {
         // if route requires auth and user isn't authenticated
         next('/login')
     } else {

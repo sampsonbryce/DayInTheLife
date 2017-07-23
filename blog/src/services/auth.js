@@ -3,7 +3,7 @@ import API from 'api'
 export default {
 
     // authentication status
-    authenticated: false,
+    _authenticated: false,
 
     // Send a request to the login URL and save the returned JWT
     login(context, creds, redirect) {
@@ -12,7 +12,7 @@ export default {
                 console.log('logged in', data);
                 localStorage.setItem('token', data.body.token);
 
-                this.authenticated = true;
+                this._authenticated = true;
 
                 // Redirect to a specified route
                 if (redirect) {
@@ -28,20 +28,30 @@ export default {
     logout(context) {
         console.log('logging out');
         localStorage.removeItem('token');
-        this.authenticated = false;
+        this._authenticated = false;
         context.$router.push({ path: '/login' });
     },
 
     getAuthHeader() {
         return 'JWT ' + localStorage.getItem('token')
     },
-
+    checkAuthOrRedirect(context){
+        this.checkAuth();
+        if(this._authenticated == false){
+            context.$router.push({ path: '/login' });
+        }
+        return true;
+    },
+    isAuthenticated(){
+        this.checkAuth();
+        return this._authenticated;
+    },
     checkAuth() {
         var jwt = localStorage.getItem('token')
         if (jwt) {
-            this.authenticated = true
+            this._authenticated = true
         } else {
-            this.authenticated = false
+            this._authenticated = false
         }
     }
 }

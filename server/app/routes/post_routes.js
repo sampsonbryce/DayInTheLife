@@ -8,9 +8,12 @@ function authenticate() {
 module.exports = function(app, db) {
 
     // get
+    var public_or_nexist = [{type: 'public'}, {type: {$exists: false}}]
+    // var public_or_nexist = {type: 'public'}
     app.get('/post/list', (req, res) => {
-        Post.find((err, items) => {
+        Post.find({ $or: public_or_nexist} , (err, items) => {
             if (err) {
+                console.error('err', err);
                 res.send({ 'error': "An error has occured" });
             } else {
                 res.send(items);
@@ -20,7 +23,7 @@ module.exports = function(app, db) {
 
     app.get('/post/:id', (req, res) => {
         const id = req.params.id;
-        const details = { '_id': id };
+        const details = { '_id': id, $or: public_or_nexist};
         Post.findOne(details, (err, item) => {
             if (err) {
                 res.send({ 'error': "An error has occured" });
@@ -35,6 +38,7 @@ module.exports = function(app, db) {
         var post = new Post();
         post.content = "";
         post.title = req.body.title;
+        post.type = 'public';
         post.save(function(err) {
             if (err) {
                 res.status('500').json({ 'error': "An error has occured" });
@@ -48,8 +52,12 @@ module.exports = function(app, db) {
     app.put('/post/:id', authenticate(), (req, res) => {
         const id = req.params.id;
         const details = { '_id': id };
-        const post = { content: req.body.content, title: req.body.title, updated: new Date().getTime() };
-
+        const post = { content: req.body.content, 
+            title: req.body.title, 
+            subtitle: req.body.subtitle, 
+            type: req.body.type,
+            updated: new Date().getTime() 
+        };
         Post.update(details, post, (err, item) => {
             if (err) {
                 res.send({ 'error': "An error has occured" });
