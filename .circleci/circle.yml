@@ -1,0 +1,4 @@
+deployment:
+  production:
+    pre:
+      - pyenv global 2.7.12
