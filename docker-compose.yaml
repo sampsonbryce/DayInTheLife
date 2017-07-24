@@ -2,7 +2,7 @@ version: '3'
 services:
   nginx:
     restart: always
-    build: ./blog
+    image: us.gcr.io/dayinthelife-168402/nginx
     ports: 
       - "80:80"
       - "443:443"
@@ -15,7 +15,7 @@ services:
     container_name: nginx
   node:
     restart: always
-    build: ./server
+    image: us.gcr.io/dayinthelife-168402/node
     networks:
       - default
     ports: 
