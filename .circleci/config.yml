@@ -107,5 +107,5 @@ jobs:
           command: |
             set -x
             echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
-            ${GCLOUD_PATH}/gcloud compute scp /home/circleci/repo/docker-compose.yaml /home/circleci/repo/redeploy-compose docker-instance-2:~
-            ${GCLOUD_PATH}/gcloud compute ssh docker-instance-2 --zone="us-west1-a" --command="chmod +x ~/redeploy-compose && ~/redeploy-compose"
+            ${GCLOUD_PATH}/gcloud compute scp /home/circleci/repo/docker-compose.yaml /home/circleci/repo/redeploy-compose docker-instance-2:~ --quiet
+            ${GCLOUD_PATH}/gcloud compute ssh docker-instance-2 --zone="us-west1-a" --command="chmod +x ~/redeploy-compose && ~/redeploy-compose" --quiet
