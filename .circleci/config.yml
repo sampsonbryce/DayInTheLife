@@ -24,6 +24,7 @@ jobs:
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "./server/package.json" }}
+          - v1-dependencies-{{ checksum "./blog/package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
@@ -45,17 +46,26 @@ jobs:
       - setup_remote_docker
 
       - run: 
+          name: Build Blog 
+          command: |
+            set -x
+            cd ./blog
+            yarn
+            npm run build
+
+      - run: 
           name: Test Compose 
           command: |
             set -x
-            cd ./blog && npm run build && cd ..
             docker-compose build 
             docker-compose up -d
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "./server/package.json" }}
+          keys: 
+            - v1-dependencies-{{ checksum "./server/package.json" }}
+            - v1-dependencies-{{ checksum "./blog/package.json" }}
         
       - deploy:
           name: Deploy to GCP
