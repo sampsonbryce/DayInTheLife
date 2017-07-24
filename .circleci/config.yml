@@ -16,7 +16,7 @@ jobs:
 
     working_directory: ~/repo
     environment:
-      GCLOUD_PATH: ~/google-cloud-sdk/bin
+      GCLOUD_PATH: /home/circleci/google-cloud-sdk/bin
     steps:
       - checkout
 
