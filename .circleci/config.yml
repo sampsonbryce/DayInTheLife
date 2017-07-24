@@ -30,8 +30,8 @@ jobs:
           name: Install gcloud
           command: |
             curl https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-163.0.0-linux-x86_64.tar.gz 
-            tar -xvf google-cloud-sdk-163.0.0-linux-x86_64.tar.gz
-            export PATH=$PATH:~/google-cloud-sdk/bin
+            # tar -xvf google-cloud-sdk-163.0.0-linux-x86_64.tar.gz
+            # export PATH=$PATH:~/google-cloud-sdk/bin
 
       - run: 
           name: Install Server Dependencies
