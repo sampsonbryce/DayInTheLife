@@ -17,6 +17,7 @@ jobs:
     working_directory: ~/repo
     environment:
       GCLOUD_PATH: /home/circleci/google-cloud-sdk/bin
+
     steps:
       - checkout
 
@@ -41,16 +42,40 @@ jobs:
             set -x
             sudo bash -c "curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose"
             sudo chmod +x /usr/local/bin/docker-compose
-
+      
+      # get docker on test container
       - setup_remote_docker
+
+      - run: 
+          name: Setup Blog 
+          command: |
+            set -x
+            cd ./blog
+            yarn
+            npm run build
+
+      - run: 
+          name: Add Certs 
+          command: |
+            set -x
+            cd ./blog
+            mkdir nginx/certs
+            echo "$SSL_BUNDLE" > nginx/certs/ssl-bundle.crt
+            echo "$DITL_KEY" > nginx/certs/dayinthelife.key
 
       - run: 
           name: Build Blog 
           command: |
             set -x
             cd ./blog
-            yarn
-            npm run build
+            docker build -t us.gcr.io/${GCLOUD_PROJECT}/nginx
+
+      - run: 
+          name: Build Server 
+          command: |
+            set -x
+            cd ./server
+            docker build -t us.gcr.io/${GCLOUD_PROJECT}/node
 
       - run: 
           name: Test Compose 
