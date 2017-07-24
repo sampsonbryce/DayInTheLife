@@ -84,6 +84,17 @@ jobs:
             docker-compose build 
             docker-compose up -d
 
+      - run: 
+          name: Configure Gcloud
+          command: |
+            set -x
+            echo "$GCLOUD_CIRCLECI_PRIVATEKEY" > ~/.ssh/google_compute_engine
+            echo "$GCLOUD_CIRCLECI_PUBKEY" > ~/.ssh/google_compute_engine.pub
+            echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
+            ${GCLOUD_PATH}/gcloud --quiet components update
+            ${GCLOUD_PATH}/gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+            ${GCLOUD_PATH}/gcloud config set project $GCLOUD_PROJECT
+
       - save_cache:
           paths:
             - ./server/node_modules
@@ -95,8 +106,5 @@ jobs:
           command: |
             set -x
             echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
-            sudo ${GCLOUD_PATH}/gcloud --quiet components update
-            sudo ${GCLOUD_PATH}/gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
-            sudo ${GCLOUD_PATH}/gcloud config set project $GCLOUD_PROJECT
             sudo ${GCLOUD_PATH}/gcloud compute scp /home/circleci/repo/docker-compose.yaml /home/circleci/repo/redeploy-compose docker-instance-2:~
             sudo ${GCLOUD_PATH}/gcloud compute ssh docker-instance-2 --command="chmod +x ~/redeploy-compose && ~/redeploy-compose"
