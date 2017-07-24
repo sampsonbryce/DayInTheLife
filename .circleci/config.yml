@@ -89,6 +89,7 @@ jobs:
           command: |
             set -x
             echo "$GCLOUD_CIRCLECI_PRIVATEKEY" > ~/.ssh/google_compute_engine
+            chmod 400 ~/.ssh/google_compute_engine
             echo "$GCLOUD_CIRCLECI_PUBKEY" > ~/.ssh/google_compute_engine.pub
             echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
             ${GCLOUD_PATH}/gcloud --quiet components update
