@@ -1,4 +1,6 @@
-deployment:
-  production:
-    pre:
-      - pyenv global 2.7.12
+dependencies:
+  pre:
+    # install gcloud
+    - curl https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-163.0.0-linux-x86_64.tar.gz 
+    - tar -xvf google-cloud-sdk-163.0.0-linux-x86_64.tar.gz
+    - export PATH=$PATH:~/google-cloud-sdk/bin
