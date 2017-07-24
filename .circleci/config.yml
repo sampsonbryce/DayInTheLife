@@ -48,6 +48,7 @@ jobs:
           name: Test Compose 
           command: |
             set -x
+            cd ./blog && npm run build && cd ..
             docker-compose build 
             docker-compose up -d
 
