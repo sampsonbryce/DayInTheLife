@@ -25,19 +25,12 @@
 </template>
 
 <script>
-import Auth from '../services/auth'
-
 export default {
     methods:{
         logout(){
-            Auth.logout(this);
+            this.logout(this);
         }
     },
-    computed:{
-        authenticated(){
-            return Auth.isAuthenticated();
-        }
-    }
 }
 </script>
 

@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import Auth from '../services/auth.js';
 import PostsService from '../services/posts';
 
 export default {
@@ -57,8 +56,9 @@ export default {
     methods: {
         getCards() {
             console.log('getting cards, type:', this.type)
+            console.log('authenticated?', this.authenticated)
             if(this.type == 'private'){
-                Auth.checkAuthOrRedirect(this);
+                this.checkAuthOrRedirect(this);
             }
             PostsService.getPosts(this, this.type).then(response => {
                 // success
@@ -73,11 +73,6 @@ export default {
             var new_date = new Date(date);
             return (new_date.getMonth()+1) + '/' + new_date.getDate() + '/' + new_date.getFullYear();
         },
-    },
-    computed:{
-        authenticated (){
-            return Auth.isAuthenticated();
-        }
     },
     beforeMount() {
         this.getCards();

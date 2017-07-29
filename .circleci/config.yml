@@ -96,16 +96,17 @@ jobs:
             ${GCLOUD_PATH}/gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
             ${GCLOUD_PATH}/gcloud config set project $GCLOUD_PROJECT
 
+      - run:
+          name: Push to container registry
+          command: |
+            set -x
+            ${GCLOUD_PATH}/gcloud docker -- push us.gcr.io/${GCLOUD_PROJECT}/node
+            ${GCLOUD_PATH}/gcloud docker -- push us.gcr.io/${GCLOUD_PROJECT}/nginx
+
       - save_cache:
           paths:
             - ./server/node_modules
             - ./blog/node_modules
           key: v1-dependencies-{{ checksum "./server/package.json" }}-{{ checksum "./blog/package.json" }}
         
-      - deploy:
-          name: Deploy to GCP
-          command: |
-            set -x
-            echo $GCLOUD_SERVICE_KEY | base64 --decode --ignore-garbage > ${HOME}/gcloud-service-key.json
-            ${GCLOUD_PATH}/gcloud compute scp /home/circleci/repo/docker-compose.yaml /home/circleci/repo/redeploy-compose docker-instance-2:~ --zone="us-west1-a" --quiet 
-            ${GCLOUD_PATH}/gcloud compute ssh docker-instance-2 --zone="us-west1-a" --command="chmod +x ~/redeploy-compose && ~/redeploy-compose" --quiet
+      

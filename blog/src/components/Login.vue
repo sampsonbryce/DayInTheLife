@@ -25,7 +25,6 @@
 <script>
 import API from 'api'
 import getFormData from 'get-form-data'
-import Auth from '../services/auth'
 
 export default {
     name: "login",
@@ -35,7 +34,7 @@ export default {
             console.log('form', form)
             let data = getFormData(form);
             console.log('data', data);
-            Auth.login(this, data, '/');
+            this.login(this, data, '/');
         }
     }
 }
